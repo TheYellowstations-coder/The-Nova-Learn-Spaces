@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA LEARN SPACE — THE YELLOW OFFICIAL STATION</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,700&family=Kanit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C89A10;
+    --yellow: #F5C518;
+    --black: #0A0A0A;
+    --off-white: #F8F5EE;
+    --warm-gray: #B8B0A0;
+    --dark-gray: #141414;
+    --mid-gray: #1E1E1E;
+    --text-muted: #666;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'Kanit', sans-serif; background: var(--black); color: var(--off-white); overflow-x: hidden; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 48px;
+    background: rgba(10,10,10,0.96);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(245,197,24,0.15);
+    transition: padding 0.3s;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 14px; text-decoration: none; }
+  .nav-logo img { height: 44px; width: auto; object-fit: contain; }
+  .nav-logo-text { display: flex; flex-direction: column; line-height: 1; }
+  .brand-main { font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700; color: var(--yellow); letter-spacing: 2px; }
+  .brand-sub { font-family: 'Kanit', sans-serif; font-size: 9px; font-weight: 300; color: var(--warm-gray); letter-spacing: 3px; text-transform: uppercase; margin-top: 4px; }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a { font-size: 12px; font-weight: 400; color: var(--warm-gray); text-decoration: none; letter-spacing: 1.5px; text-transform: uppercase; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--yellow); }
+  .nav-cta { background: var(--yellow); color: var(--black); border: none; padding: 10px 22px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1px; cursor: pointer; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-cta:hover { background: var(--gold); }
+
+  /* ── HERO ── */
+  #hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; position: relative; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 140px 60px 80px 80px; position: relative; z-index: 2; }
+  .hero-eyebrow { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 28px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; display: flex; align-items: center; gap: 10px; }
+  .hero-eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--yellow); }
+  .hero-title { font-family: 'Playfair Display', serif; font-size: clamp(48px, 4.5vw, 72px); font-weight: 900; line-height: 1.05; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards; }
+  .hero-title .highlight { color: var(--yellow); font-style: italic; display: block; }
+  .hero-subtitle { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--warm-gray); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 32px; opacity: 0; animation: fadeUp 0.8s 0.6s forwards; }
+  .hero-desc { font-size: 15px; font-weight: 300; line-height: 1.9; color: rgba(248,245,238,0.7); max-width: 440px; margin-bottom: 48px; opacity: 0; animation: fadeUp 0.8s 0.8s forwards; }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 1s forwards; }
+  .btn-primary { background: var(--yellow); color: var(--black); padding: 15px 34px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-decoration: none; transition: all 0.25s; display: inline-block; }
+  .btn-primary:hover { background: var(--gold); transform: translateY(-2px); }
+  .btn-outline { border: 1px solid var(--gold); color: var(--gold); padding: 15px 34px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-decoration: none; transition: all 0.25s; display: inline-block; }
+  .btn-outline:hover { background: rgba(212,160,23,0.1); }
+  .hero-right { position: relative; overflow: hidden; }
+  .hero-right img { width: 100%; height: 100%; object-fit: cover; transition: transform 10s ease; }
+  .hero-right:hover img { transform: scale(1.05); }
+  .hero-right::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, var(--black) 0%, rgba(10,10,10,0.3) 50%, transparent 100%); }
+  .hero-stats { position: absolute; bottom: 48px; left: 80px; display: flex; gap: 0; z-index: 3; opacity: 0; animation: fadeUp 0.8s 1.2s forwards; background: rgba(10,10,10,0.85); backdrop-filter: blur(8px); border: 1px solid rgba(245,197,24,0.2); }
+  .stat-item { padding: 18px 28px; text-align: center; border-right: 1px solid rgba(245,197,24,0.15); }
+  .stat-item:last-child { border-right: none; }
+  .stat-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: var(--yellow); line-height: 1; }
+  .stat-label { font-size: 10px; font-weight: 300; color: var(--warm-gray); letter-spacing: 1px; margin-top: 4px; }
+
+  /* ── TICKER ── */
+  .ticker { background: var(--yellow); overflow: hidden; padding: 11px 0; white-space: nowrap; }
+  .ticker-track { display: inline-flex; animation: ticker 32s linear infinite; }
+  .ticker-item { font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; color: var(--black); letter-spacing: 2px; text-transform: uppercase; padding: 0 40px; }
+  .ticker-sep { color: rgba(10,10,10,0.35); padding: 0 6px; }
+  @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── SECTION ── */
+  .section-pad { padding: 110px 80px; }
+  .section-label { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--yellow); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 18px; display: flex; align-items: center; gap: 12px; }
+  .section-label::after { content: ''; flex: 0 0 28px; height: 1px; background: var(--yellow); }
+  .section-title { font-family: 'Playfair Display', serif; font-size: clamp(34px, 3.2vw, 52px); font-weight: 900; line-height: 1.1; margin-bottom: 24px; }
+  .section-body { font-size: 15px; font-weight: 300; line-height: 1.9; color: rgba(248,245,238,0.65); max-width: 580px; }
+
+  /* ── ABOUT ── */
+  #about { background: var(--dark-gray); display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .about-mosaic { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 200px 200px; gap: 6px; }
+  .about-mosaic img { width: 100%; height: 100%; object-fit: cover; transition: filter 0.4s, transform 0.4s; cursor: pointer; }
+  .about-mosaic img:hover { filter: brightness(1.1); transform: scale(1.02); z-index: 2; position: relative; }
+  .about-mosaic .span2 { grid-column: span 2; height: 200px; }
+
+  /* ── TYPES ── */
+  #types { background: var(--black); }
+  .types-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin-top: 56px; }
+  .type-card { background: var(--dark-gray); padding: 52px 44px; position: relative; overflow: hidden; transition: background 0.3s; }
+  .type-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--yellow); transform: scaleX(0); transform-origin: left; transition: transform 0.4s; }
+  .type-card:hover::before { transform: scaleX(1); }
+  .type-card:hover { background: #1A1A1A; }
+  .type-ghost { font-family: 'Playfair Display', serif; font-size: 160px; font-weight: 900; color: rgba(245,197,24,0.04); position: absolute; top: -30px; right: 16px; line-height: 1; pointer-events: none; user-select: none; }
+  .type-tag { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 14px; display: block; }
+  .type-name { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; margin-bottom: 6px; line-height: 1; }
+  .type-area { font-size: 13px; color: var(--warm-gray); font-weight: 300; margin-bottom: 28px; }
+  .type-area strong { color: var(--yellow); font-weight: 600; }
+  .feat-list { list-style: none; }
+  .feat-list li { font-size: 13px; font-weight: 300; color: rgba(248,245,238,0.65); padding: 9px 0; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; align-items: center; gap: 12px; }
+  .feat-list li::before { content: '—'; color: var(--yellow); font-family: 'Space Mono', monospace; font-size: 11px; flex-shrink: 0; }
+  .stats-bar { margin-top: 40px; display: flex; background: var(--dark-gray); border: 1px solid rgba(245,197,24,0.12); flex-wrap: wrap; }
+  .sbar-item { padding: 24px 36px; border-right: 1px solid rgba(245,197,24,0.1); flex: 1; min-width: 160px; }
+  .sbar-item:last-child { border-right: none; }
+  .sbar-num { font-family: 'Playfair Display', serif; font-size: 30px; font-weight: 900; color: var(--yellow); }
+  .sbar-label { font-size: 11px; color: var(--warm-gray); margin-top: 4px; font-weight: 300; }
+
+  /* ── TARGETS ── */
+  #targets { background: var(--dark-gray); }
+  .targets-header { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; margin-bottom: 64px; }
+  .target-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+  .tcard {
+    background: var(--black); position: relative; overflow: hidden;
+    transition: all 0.35s; cursor: default; display: flex; flex-direction: column;
+  }
+  .tcard-img { width: 100%; height: 220px; object-fit: cover; display: block; transition: transform 0.5s; }
+  .tcard:hover .tcard-img { transform: scale(1.04); }
+  .tcard-body { padding: 28px 24px; flex: 1; }
+  .tcard:hover { background: #0e0e0e; transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.5); }
+  .tcard::after { content: ''; position: absolute; bottom: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--yellow), transparent); opacity: 0; transition: opacity 0.3s; }
+  .tcard:hover::after { opacity: 1; }
+  .tcard-num { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--yellow); letter-spacing: 3px; margin-bottom: 8px; display: block; }
+  .tcard-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; margin-bottom: 10px; line-height: 1.3; }
+  .tcard-desc { font-size: 12px; font-weight: 300; line-height: 1.8; color: rgba(248,245,238,0.55); }
+  .tcard-wide { grid-column: span 3; flex-direction: row; align-items: stretch; }
+  .tcard-wide .tcard-img { width: 380px; height: auto; flex-shrink: 0; object-fit: cover; }
+  .tcard-wide .tcard-body { padding: 36px 40px; display: flex; flex-direction: column; justify-content: center; }
+  .tcard-wide .tcard-title { font-size: 26px; }
+
+  /* ── AUTO-SCROLL GALLERY ── */
+  #gallery { background: var(--black); padding: 110px 0; overflow: hidden; }
+  .gallery-header { padding: 0 80px 56px; }
+  .gallery-strip-wrap { overflow: hidden; position: relative; }
+  .gallery-strip-wrap::before,
+  .gallery-strip-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 120px; z-index: 2; pointer-events: none;
+  }
+  .gallery-strip-wrap::before { left: 0; background: linear-gradient(90deg, var(--black), transparent); }
+  .gallery-strip-wrap::after  { right: 0; background: linear-gradient(270deg, var(--black), transparent); }
+  .gallery-strip { display: flex; gap: 8px; animation: galleryScroll 60s linear infinite; width: max-content; }
+  .gallery-strip:hover { animation-play-state: paused; }
+  @keyframes galleryScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .gallery-strip img {
+    height: 360px; width: auto; flex-shrink: 0; object-fit: cover;
+    cursor: pointer; transition: filter 0.3s, transform 0.3s;
+    border: 2px solid transparent;
+  }
+  .gallery-strip img:hover {
+    filter: brightness(1.15);
+    transform: scale(1.02);
+    border-color: rgba(245,197,24,0.4);
+    z-index: 1; position: relative;
+  }
+  .gallery-hint { text-align: center; margin-top: 24px; font-family: 'Space Mono', monospace; font-size: 10px; color: var(--warm-gray); letter-spacing: 3px; }
+
+  /* ── LOCATION ── */
+  #location { background: var(--dark-gray); }
+  .loc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 64px; align-items: start; }
+  .loc-list { display: flex; flex-direction: column; }
+  .loc-row { display: flex; gap: 18px; align-items: flex-start; padding: 18px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .loc-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+  .loc-title { font-size: 13px; font-weight: 600; color: var(--yellow); margin-bottom: 4px; }
+  .loc-desc { font-size: 12px; font-weight: 300; color: rgba(248,245,238,0.6); line-height: 1.7; }
+  .map-img-box { width: 100%; border: 1px solid rgba(245,197,24,0.15); overflow: hidden; }
+  .map-img-box img { width: 100%; display: block; transition: transform 0.4s; }
+  .map-img-box img:hover { transform: scale(1.02); }
+  .location-note { margin-top: 14px; padding: 20px 24px; background: var(--black); border-left: 3px solid var(--yellow); }
+  .location-note p { font-size: 12px; font-weight: 300; line-height: 1.8; color: rgba(248,245,238,0.6); }
+
+  /* ── PROMO ── */
+  #promo { background: var(--yellow); padding: 80px; display: grid; grid-template-columns: 1fr auto; gap: 48px; align-items: center; }
+  .promo-eyebrow { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 4px; text-transform: uppercase; color: rgba(10,10,10,0.5); margin-bottom: 14px; }
+  .promo-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 2.8vw, 52px); font-weight: 900; color: var(--black); line-height: 1.1; }
+  .promo-title em { font-style: italic; }
+  .promo-desc { margin-top: 20px; font-size: 15px; font-weight: 400; color: rgba(10,10,10,0.65); line-height: 1.8; max-width: 520px; }
+  .promo-side { display: flex; flex-direction: column; gap: 12px; align-items: flex-end; }
+  .btn-dark { background: var(--black); color: var(--yellow); padding: 16px 36px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-decoration: none; white-space: nowrap; transition: all 0.25s; display: inline-block; }
+  .btn-dark:hover { background: #1a1a1a; }
+  .btn-green { background: #06C755; color: #fff; padding: 16px 36px; font-family: 'Space Mono', monospace; font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-decoration: none; white-space: nowrap; transition: all 0.25s; display: inline-block; }
+  .btn-green:hover { background: #05b04a; }
+  .promo-note { font-family: 'Space Mono', monospace; font-size: 9px; color: rgba(10,10,10,0.45); letter-spacing: 1px; text-align: right; }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--black); }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 64px; }
+  .c-item { margin-bottom: 32px; }
+  .c-label { font-family: 'Space Mono', monospace; font-size: 9px; color: var(--yellow); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 8px; }
+  .c-val { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; }
+  .c-val a { color: inherit; text-decoration: none; transition: color 0.2s; }
+  .c-val a:hover { color: var(--yellow); }
+  .c-sub { font-size: 12px; color: var(--warm-gray); margin-top: 4px; font-weight: 300; }
+  .hours-table { margin-top: 8px; }
+  .h-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .h-day { font-size: 13px; font-weight: 300; color: rgba(248,245,238,0.6); }
+  .h-time { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--yellow); }
+  /* Contact right: map + form stacked */
+  .contact-right { display: flex; flex-direction: column; gap: 24px; }
+  .contact-map-img { width: 100%; border: 1px solid rgba(245,197,24,0.15); overflow: hidden; }
+  .contact-map-img img { width: 100%; display: block; }
+  .contact-form-box { background: var(--dark-gray); padding: 32px; border: 1px solid rgba(245,197,24,0.12); }
+  .form-title { font-family: 'Space Mono', monospace; font-size: 10px; color: var(--yellow); letter-spacing: 3px; margin-bottom: 20px; }
+  .form-row { margin-bottom: 14px; }
+  .form-row label { font-size: 11px; color: var(--warm-gray); display: block; margin-bottom: 6px; font-family: 'Space Mono', monospace; letter-spacing: 1px; }
+  .form-row input, .form-row textarea {
+    width: 100%; background: var(--black); border: 1px solid rgba(245,197,24,0.2);
+    color: var(--off-white); padding: 12px 14px; font-family: 'Kanit', sans-serif;
+    font-size: 14px; font-weight: 300; outline: none; resize: none; transition: border-color 0.2s;
+  }
+  .form-row input:focus, .form-row textarea:focus { border-color: var(--yellow); }
+  .form-row textarea { height: 80px; }
+  .form-submit {
+    background: var(--yellow); color: var(--black); border: none;
+    padding: 14px 32px; font-family: 'Space Mono', monospace;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    cursor: pointer; transition: all 0.25s; width: 100%; margin-top: 4px;
+  }
+  .form-submit:hover { background: var(--gold); }
+  .agent-note { margin-top: 0; padding: 18px 20px; background: rgba(245,197,24,0.06); border-left: 3px solid var(--yellow); }
+  .agent-note p { font-size: 12px; font-weight: 300; color: rgba(248,245,238,0.6); line-height: 1.7; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--dark-gray); border-top: 1px solid rgba(245,197,24,0.1); padding: 36px 80px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
+  .foot-brand { font-family: 'Space Mono', monospace; font-size: 11px; color: var(--yellow); letter-spacing: 2px; }
+  .foot-sub { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+  .foot-copy { font-size: 11px; color: var(--text-muted); text-align: right; }
+
+  /* ── LIGHTBOX ── */
+  .lightbox { display: none; position: fixed; inset: 0; z-index: 1000; background: rgba(0,0,0,0.96); align-items: center; justify-content: center; }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 90vw; max-height: 90vh; object-fit: contain; }
+  .lb-close { position: absolute; top: 24px; right: 32px; font-size: 36px; color: var(--yellow); cursor: pointer; font-family: 'Space Mono', monospace; line-height: 1; }
+  .lb-prev, .lb-next { position: absolute; top: 50%; transform: translateY(-50%); font-size: 28px; color: var(--yellow); cursor: pointer; background: rgba(0,0,0,0.5); padding: 16px 20px; font-family: 'Space Mono', monospace; user-select: none; }
+  .lb-prev { left: 16px; }
+  .lb-next { right: 16px; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-d1 { transition-delay: 0.1s; }
+  .reveal-d2 { transition-delay: 0.2s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 960px) {
+    nav { padding: 14px 20px; }
+    .nav-links { display: none; }
+    .section-pad { padding: 72px 24px; }
+    #hero { grid-template-columns: 1fr; }
+    .hero-left { padding: 110px 24px 48px; }
+    .hero-right { height: 260px; }
+    #about, .types-grid, .targets-header, .loc-grid, .contact-grid { grid-template-columns: 1fr; }
+    .target-grid { grid-template-columns: 1fr; }
+    .tcard-wide { flex-direction: column; }
+    .tcard-wide .tcard-img { width: 100%; height: 220px; }
+    #promo { grid-template-columns: 1fr; padding: 56px 24px; }
+    .promo-side { align-items: flex-start; }
+    footer { padding: 28px 24px; }
+    .hero-stats { left: 24px; bottom: 24px; }
+    .gallery-header { padding: 0 24px 40px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lb">
+  <span class="lb-close" onclick="closeLB()">✕</span>
+  <span class="lb-prev" onclick="lbMove(-1)">‹</span>
+  <img id="lb-img" src="" alt="">
+  <span class="lb-next" onclick="lbMove(1)">›</span>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-logo">
+    <img src="https://i.ibb.co/HfzmJhk4/Chat-GPT-Image-Jun-1-2026-06-40-32-AM.png" alt="NOVA LEARN SPACE Logo">
+    <div class="nav-logo-text">
+      <span class="brand-main">NOVA LEARN SPACE</span>
+      <span class="brand-sub">THE YELLOW OFFICIAL STATION</span>
+    </div>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">พื้นที่</a></li>
+    <li><a href="#types">ยูนิต</a></li>
+    <li><a href="#targets">ธุรกิจที่เหมาะ</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#location">ทำเล</a></li>
+    <li><a href="#contact">ติดต่อ</a></li>
+  </ul>
+  <a href="tel:0846988881" class="nav-cta">📞 ติดต่อเรา</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <p class="hero-eyebrow">ฝั่งธนฯ · กาญจนาภิเษก-ปิ่นเกล้า · เหลือ 2 ยูนิตสุดท้าย</p>
+    <h1 class="hero-title">
+      พื้นที่พรีเมียม<br>
+      <span class="highlight">ที่ธุรกิจของคุณ<br>รอคอยอยู่</span>
+    </h1>
+    <p class="hero-subtitle">NOVA LEARN SPACE · OFFICE FOR RENT</p>
+    <p class="hero-desc">
+      อาคารสำนักงานให้เช่า Premium เพียง 10 ยูนิต พื้นที่ขนาดใหญ่สูงสุด 900 ตร.ม.
+      ที่จอดรถเพียบ สิ่งอำนวยความสะดวกครบครัน ทำเลทองย่านชานเมืองที่มีทุกอย่าง
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">นัดชมสถานที่</a>
+      <a href="#gallery" class="btn-outline">ดูรูปภาพ</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <img src="https://i.ibb.co/8GQ19FD/4.jpg" alt="THE YELLOW OFFICIAL STATION">
+  </div>
+  <div class="hero-stats">
+    <div class="stat-item"><div class="stat-num">10</div><div class="stat-label">ยูนิตทั้งหมด</div></div>
+    <div class="stat-item"><div class="stat-num">2</div><div class="stat-label">ยูนิตคงเหลือ</div></div>
+    <div class="stat-item"><div class="stat-num">900</div><div class="stat-label">ตร.ม. สูงสุด</div></div>
+    <div class="stat-item"><div class="stat-num">3</div><div class="stat-label">ชั้น/ยูนิต</div></div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">PRIME LOCATION</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">ทำเลทอง ฝั่งธนฯ</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">เข้าเมืองไม่ถึง 20 นาที</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">ที่จอดรถ 60-80 คัน</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">3 FLOORS · PREMIUM OFFICE</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">กล้องวงจรปิด 24 ชม.</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">ใกล้ MRT 3 สถานี</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">เหลือ 2 ยูนิตสุดท้าย</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">PRIME LOCATION</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">ทำเลทอง ฝั่งธนฯ</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">เข้าเมืองไม่ถึง 20 นาที</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">ที่จอดรถ 60-80 คัน</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">3 FLOORS · PREMIUM OFFICE</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">กล้องวงจรปิด 24 ชม.</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">ใกล้ MRT 3 สถานี</span><span class="ticker-sep">◆</span>
+    <span class="ticker-item">เหลือ 2 ยูนิตสุดท้าย</span><span class="ticker-sep">◆</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section-pad">
+  <div class="reveal">
+    <p class="section-label">เกี่ยวกับโครงการ</p>
+    <h2 class="section-title">ออกแบบมาเพื่อ<br>ธุรกิจที่เติบโต</h2>
+    <p class="section-body">THE YELLOW OFFICIAL STATION — อาคารสีเหลือง-ขาวโดดเด่น กระจกสูงตลอดแนว 3 ชั้น บนทำเลยุทธศาสตร์ย่านกาญจนาภิเษก-ปิ่นเกล้า ใกล้ถนนพระเทพตัดใหม่</p>
+    <br>
+    <p class="section-body">พื้นที่เพดานสูง พื้นกระเบื้องแกรนิต ผนังตกแต่งสวย ระบบไฟฟ้า-ประปา อินเตอร์เน็ต กล้องวงจรปิด และ รปภ. ตลอด 24 ชั่วโมง รองรับการ Partition ได้อย่างอิสระ</p>
+    <br><br>
+    <a href="#contact" class="btn-outline">นัดชมสถานที่จริง →</a>
+  </div>
+  <div class="about-mosaic reveal reveal-d1">
+    <img src="https://i.ibb.co/LhDG2y0s/6.jpg" alt="อาคาร" onclick="openLB(this.src,0)">
+    <img src="https://i.ibb.co/CKgkL4Nv/7.jpg" alt="อาคาร" onclick="openLB(this.src,1)">
+    <img src="https://i.ibb.co/jvjq3qYC/8.jpg" alt="ภายใน" class="span2" onclick="openLB(this.src,2)">
+  </div>
+</section>
+
+<!-- TYPES -->
+<section id="types" class="section-pad">
+  <div class="reveal">
+    <p class="section-label">ประเภทยูนิต</p>
+    <h2 class="section-title">เลือกพื้นที่<br>ที่ตอบโจทย์</h2>
+  </div>
+  <div class="types-grid reveal reveal-d1">
+    <div class="type-card">
+      <div class="type-ghost">A</div>
+      <span class="type-tag">TYPE A · STANDARD</span>
+      <div class="type-name">450 ตร.ม.</div>
+      <div class="type-area">150 ตร.ม. × 3 ชั้น = <strong>450 ตร.ม. รวม</strong></div>
+      <ul class="feat-list">
+        <li>พื้นที่ใช้สอย 150 ตร.ม. ต่อชั้น</li>
+        <li>3 ชั้น แบ่งโซนได้อิสระ</li>
+        <li>ที่จอดรถเอกสิทธิ์ 6 คัน/ยูนิต</li>
+        <li>เพดานสูง พื้นแกรนิต</li>
+        <li>ระบบสาธารณูปโภคครบ</li>
+      </ul>
+    </div>
+    <div class="type-card">
+      <div class="type-ghost">B</div>
+      <span class="type-tag">TYPE B · FLAGSHIP</span>
+      <div class="type-name">900 ตร.ม.</div>
+      <div class="type-area">300 ตร.ม. × 3 ชั้น = <strong>900 ตร.ม. รวม</strong></div>
+      <ul class="feat-list">
+        <li>พื้นที่กว้างขวาง 300 ตร.ม. ต่อชั้น</li>
+        <li>3 ชั้น รองรับหลายแผนก/โซน</li>
+        <li>ที่จอดรถเอกสิทธิ์ 10 คัน/ยูนิต</li>
+        <li>รองรับการ Partition ได้เต็มรูปแบบ</li>
+        <li>เหมาะธุรกิจขยายสาขา</li>
+      </ul>
+    </div>
+  </div>
+  <div class="stats-bar reveal reveal-d2">
+    <div class="sbar-item"><div class="sbar-num">60–80</div><div class="sbar-label">คันที่จอดรถส่วนกลาง</div></div>
+    <div class="sbar-item"><div class="sbar-num">24 ชม.</div><div class="sbar-label">กล้องวงจรปิด + รปภ.</div></div>
+    <div class="sbar-item"><div class="sbar-num">10</div><div class="sbar-label">ยูนิตทั้งหมด (Exclusive)</div></div>
+    <div class="sbar-item"><div class="sbar-num">2</div><div class="sbar-label">ยูนิตคงเหลือ</div></div>
+  </div>
+</section>
+
+<!-- TARGETS -->
+<section id="targets" class="section-pad">
+  <div class="targets-header">
+    <div class="reveal">
+      <p class="section-label">ธุรกิจที่เหมาะสม</p>
+      <h2 class="section-title">พื้นที่รองรับ<br>ทุกมิติธุรกิจ</h2>
+    </div>
+    <div class="reveal reveal-d1">
+      <p class="section-body">ด้วยพื้นที่ขนาดใหญ่ เพดานสูง และทำเลที่ดินติดถนนใหญ่ 12 เลน เชื่อมต่อทุกเส้นทาง จึงเหมาะอย่างยิ่งสำหรับธุรกิจที่ต้องการขยายกิจการ และสร้าง Brand Presence ที่โดดเด่นในทำเลทองคำ</p>
+    </div>
+  </div>
+  <div class="target-grid reveal">
+
+    <div class="tcard">
+      <img class="tcard-img" src="https://i.ibb.co/PGR07Qc0/29-2569-15-34-10.png" alt="สถาบันสอนภาษา" onclick="openLB(this.src)">
+      <div class="tcard-body">
+        <span class="tcard-num">01</span>
+        <div class="tcard-title">สถาบันสอนภาษา</div>
+        <p class="tcard-desc">แบ่งโซนชั้นเรียนได้หลากหลาย ห้องกลุ่ม ห้องตัวต่อตัว ห้อง Activity พร้อม Reception และพื้นที่รอ รองรับนักเรียนทุกวัยจากทุกสัญชาติ</p>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <img class="tcard-img" src="https://i.ibb.co/cXXM8MHM/29-2569-15-34-17.png" alt="โรงเรียนดนตรี" onclick="openLB(this.src)">
+      <div class="tcard-body">
+        <span class="tcard-num">02</span>
+        <div class="tcard-title">โรงเรียนสอนดนตรี</div>
+        <p class="tcard-desc">Partition เป็นห้องซ้อมบุผนังเก็บเสียง ห้องเรียนเดี่ยว ห้องวง ห้องบันทึกเสียง รองรับทั้งดนตรีสากลและดนตรีไทย ทุกเพศทุกวัยเข้าถึงได้</p>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <img class="tcard-img" src="https://i.ibb.co/MyjYNgsK/Chat-GPT-Image-29-2569-14-48-23.png" alt="คลินิกสัตวแพทย์" onclick="openLB(this.src)">
+      <div class="tcard-body">
+        <span class="tcard-num">03</span>
+        <div class="tcard-title">คลินิกสัตวแพทย์ & Pet Center</div>
+        <p class="tcard-desc">ทำเลชานเมืองที่มีประชากรหนาแน่น รองรับบริการตรวจรักษา จำหน่ายอาหาร และอุปกรณ์สัตว์เลี้ยงครบวงจร</p>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <img class="tcard-img" src="https://i.ibb.co/pBynhMxr/Chat-GPT-Image-29-2569-14-52-42.png" alt="ร้านเทคโนโลยี" onclick="openLB(this.src)">
+      <div class="tcard-body">
+        <span class="tcard-num">04</span>
+        <div class="tcard-title">ร้านเทคโนโลยี & Gadget</div>
+        <p class="tcard-desc">โชว์รูมขนาดใหญ่ ห้องทดลองใช้จริง พื้นที่เก็บสต็อก Studio ครบวงจร รองรับการขยาย Franchise สาขาย่อย</p>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <img class="tcard-img" src="https://i.ibb.co/G4cZSmGK/Chat-GPT-Image-29-2569-15-07-05.png" alt="Fashion Outlet" onclick="openLB(this.src)">
+      <div class="tcard-body">
+        <span class="tcard-num">05</span>
+        <div class="tcard-title">Fashion Outlet & Brand Store</div>
+        <p class="tcard-desc">จัดแสดงสินค้า ห้องลองชุด Shelf เก็บสินค้า ห้อง Live Commerce และหลังบ้านกระจายสินค้า เพิ่ม Productivity ลดเวลา เพิ่มยอดขาย</p>
+      </div>
+    </div>
+
+    <div class="tcard">
+      <img class="tcard-img" src="https://i.ibb.co/HpPWb1Ph/Chat-GPT-Image-29-2569-15-12-19.png" alt="คลินิกความงาม" onclick="openLB(this.src)">
+      <div class="tcard-body">
+        <span class="tcard-num">06</span>
+        <div class="tcard-title">คลินิกความงาม & Skincare</div>
+        <p class="tcard-desc">ติดถนนใหญ่โดดเด่น ห้องบริการ โซนจำหน่าย Skincare พื้นที่จัดแสดงผลิตภัณฑ์ รองรับการขยายสาขาอย่างยั่งยืน</p>
+      </div>
+    </div>
+
+    <div class="tcard tcard-wide">
+      <img class="tcard-img" src="https://i.ibb.co/Cs6bW9K1/Chat-GPT-Image-29-2569-15-16-16.png" alt="Corporate Office">
+      <div class="tcard-body">
+        <span class="tcard-num">07</span>
+        <div class="tcard-title">สำนักงาน Corporate & Co-Working Space</div>
+        <p class="tcard-desc">สำหรับทุกธุรกิจที่ต้องการพื้นที่ทำงานระดับ Premium บนที่ดินติดถนนใหญ่ 12 เลน ในทำเลที่เชื่อมต่อทั้งในเมืองและชานเมือง ภาพลักษณ์องค์กรที่โดดเด่น ที่จอดรถเพียงพอ สิ่งอำนวยความสะดวกครบครัน</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- AUTO-SCROLL GALLERY -->
+<section id="gallery">
+  <div class="gallery-header reveal">
+    <p class="section-label">Gallery</p>
+    <h2 class="section-title">ชมพื้นที่จริง</h2>
+  </div>
+  <div class="gallery-strip-wrap">
+    <div class="gallery-strip" id="galleryStrip">
+      <!-- Set 1 -->
+      <img src="https://i.ibb.co/xK3Btj3r/5.jpg"     alt="" onclick="openLB(this.src,0)">
+      <img src="https://i.ibb.co/LhDG2y0s/6.jpg"     alt="" onclick="openLB(this.src,1)">
+      <img src="https://i.ibb.co/CKgkL4Nv/7.jpg"     alt="" onclick="openLB(this.src,2)">
+      <img src="https://i.ibb.co/jvjq3qYC/8.jpg"     alt="" onclick="openLB(this.src,3)">
+      <img src="https://i.ibb.co/S43NFLWZ/9.jpg"     alt="" onclick="openLB(this.src,4)">
+      <img src="https://i.ibb.co/PsNp2k9j/10.jpg"    alt="" onclick="openLB(this.src,5)">
+      <img src="https://i.ibb.co/j9YsR2FS/11.jpg"    alt="" onclick="openLB(this.src,6)">
+      <img src="https://i.ibb.co/bRWBZ8x2/12.jpg"    alt="" onclick="openLB(this.src,7)">
+      <img src="https://i.ibb.co/7J2GXxV8/13.jpg"    alt="" onclick="openLB(this.src,8)">
+      <img src="https://i.ibb.co/0dGvSDx/14.jpg"     alt="" onclick="openLB(this.src,9)">
+      <img src="https://i.ibb.co/bj1D8P5P/15.jpg"    alt="" onclick="openLB(this.src,10)">
+      <img src="https://i.ibb.co/DDm4bdmW/17.jpg"    alt="" onclick="openLB(this.src,11)">
+      <img src="https://i.ibb.co/PZqSqKDL/18.jpg"    alt="" onclick="openLB(this.src,12)">
+      <img src="https://i.ibb.co/YTYvmBdV/22.jpg"    alt="" onclick="openLB(this.src,13)">
+      <img src="https://i.ibb.co/PsYsDYYp/23.jpg"    alt="" onclick="openLB(this.src,14)">
+      <img src="https://i.ibb.co/1GG76wQd/26.jpg"    alt="" onclick="openLB(this.src,15)">
+      <img src="https://i.ibb.co/N6LDr2G9/29.jpg"    alt="" onclick="openLB(this.src,16)">
+      <img src="https://i.ibb.co/JZCdSjx/30.jpg"     alt="" onclick="openLB(this.src,17)">
+      <img src="https://i.ibb.co/jkPKqhVD/31.jpg"    alt="" onclick="openLB(this.src,18)">
+      <img src="https://i.ibb.co/rVVdk90/32.jpg"     alt="" onclick="openLB(this.src,19)">
+      <img src="https://i.ibb.co/93S8Bjkm/33.jpg"    alt="" onclick="openLB(this.src,20)">
+      <img src="https://i.ibb.co/JWHsLb2k/34.jpg"    alt="" onclick="openLB(this.src,21)">
+      <img src="https://i.ibb.co/xtfnngg6/35.jpg"    alt="" onclick="openLB(this.src,22)">
+      <img src="https://i.ibb.co/KxcS2TBn/36.jpg"    alt="" onclick="openLB(this.src,23)">
+      <img src="https://i.ibb.co/MyQcxm1V/37.jpg"    alt="" onclick="openLB(this.src,24)">
+      <img src="https://i.ibb.co/DHf30nH0/38.jpg"    alt="" onclick="openLB(this.src,25)">
+      <img src="https://i.ibb.co/dJk527WF/40.jpg"    alt="" onclick="openLB(this.src,26)">
+      <img src="https://i.ibb.co/spjVgdND/41.jpg"    alt="" onclick="openLB(this.src,27)">
+      <img src="https://i.ibb.co/2YkZhgZ9/45.jpg"    alt="" onclick="openLB(this.src,28)">
+      <img src="https://i.ibb.co/PG0SX1r5/46.jpg"    alt="" onclick="openLB(this.src,29)">
+      <img src="https://i.ibb.co/Z1SkcYh1/47.jpg"    alt="" onclick="openLB(this.src,30)">
+      <img src="https://i.ibb.co/pj9r4d6g/48.jpg"    alt="" onclick="openLB(this.src,31)">
+      <!-- Set 2 duplicate for seamless loop -->
+      <img src="https://i.ibb.co/xK3Btj3r/5.jpg"     alt="">
+      <img src="https://i.ibb.co/LhDG2y0s/6.jpg"     alt="">
+      <img src="https://i.ibb.co/CKgkL4Nv/7.jpg"     alt="">
+      <img src="https://i.ibb.co/jvjq3qYC/8.jpg"     alt="">
+      <img src="https://i.ibb.co/S43NFLWZ/9.jpg"     alt="">
+      <img src="https://i.ibb.co/PsNp2k9j/10.jpg"    alt="">
+      <img src="https://i.ibb.co/j9YsR2FS/11.jpg"    alt="">
+      <img src="https://i.ibb.co/bRWBZ8x2/12.jpg"    alt="">
+      <img src="https://i.ibb.co/7J2GXxV8/13.jpg"    alt="">
+      <img src="https://i.ibb.co/0dGvSDx/14.jpg"     alt="">
+      <img src="https://i.ibb.co/bj1D8P5P/15.jpg"    alt="">
+      <img src="https://i.ibb.co/DDm4bdmW/17.jpg"    alt="">
+      <img src="https://i.ibb.co/PZqSqKDL/18.jpg"    alt="">
+      <img src="https://i.ibb.co/YTYvmBdV/22.jpg"    alt="">
+      <img src="https://i.ibb.co/PsYsDYYp/23.jpg"    alt="">
+      <img src="https://i.ibb.co/1GG76wQd/26.jpg"    alt="">
+      <img src="https://i.ibb.co/N6LDr2G9/29.jpg"    alt="">
+      <img src="https://i.ibb.co/JZCdSjx/30.jpg"     alt="">
+      <img src="https://i.ibb.co/jkPKqhVD/31.jpg"    alt="">
+      <img src="https://i.ibb.co/rVVdk90/32.jpg"     alt="">
+      <img src="https://i.ibb.co/93S8Bjkm/33.jpg"    alt="">
+      <img src="https://i.ibb.co/JWHsLb2k/34.jpg"    alt="">
+      <img src="https://i.ibb.co/xtfnngg6/35.jpg"    alt="">
+      <img src="https://i.ibb.co/KxcS2TBn/36.jpg"    alt="">
+      <img src="https://i.ibb.co/MyQcxm1V/37.jpg"    alt="">
+      <img src="https://i.ibb.co/DHf30nH0/38.jpg"    alt="">
+      <img src="https://i.ibb.co/dJk527WF/40.jpg"    alt="">
+      <img src="https://i.ibb.co/spjVgdND/41.jpg"    alt="">
+      <img src="https://i.ibb.co/2YkZhgZ9/45.jpg"    alt="">
+      <img src="https://i.ibb.co/PG0SX1r5/46.jpg"    alt="">
+      <img src="https://i.ibb.co/Z1SkcYh1/47.jpg"    alt="">
+      <img src="https://i.ibb.co/pj9r4d6g/48.jpg"    alt="">
+    </div>
+  </div>
+  <p class="gallery-hint">วางเมาส์เพื่อหยุด · คลิกเพื่อขยาย</p>
+</section>
+
+<!-- LOCATION -->
+<section id="location" class="section-pad">
+  <div class="reveal">
+    <p class="section-label">ทำเล & การเดินทาง</p>
+    <h2 class="section-title">ทำเลทอง<br>ชานเมืองครบครัน</h2>
+    <p class="section-body">ย่านฝั่งธนฯ (กาญจนาภิเษก-ปิ่นเกล้า) ใกล้ถนนพระเทพตัดใหม่ — ออกเมืองง่าย เข้าเมืองเร็ว มีทุกอย่างครบในรัศมี 5 กิโลเมตร</p>
+  </div>
+  <div class="loc-grid reveal">
+    <div class="loc-list">
+      <div class="loc-row">
+        <span class="loc-icon">🚗</span>
+        <div><div class="loc-title">ทางด่วนศรีรัช & เส้นทางสายใหม่</div><div class="loc-desc">เข้าเมืองไม่ถึง 20 นาที · ขึ้นทางด่วนศรีรัชได้เพียง 15 นาที · ออกเพชรเกษม-กาญจนาภิเษก-ราชพฤกษ์คล่องตัว</div></div>
+      </div>
+      <div class="loc-row">
+        <span class="loc-icon">🚇</span>
+        <div><div class="loc-title">MRT สายสีน้ำเงิน ขึ้นได้ 3 สถานี</div><div class="loc-desc">สี่แยกไฟฉาย · บางหว้า · หลักสอง — ห่างเพียง 5-10 นาที</div></div>
+      </div>
+      <div class="loc-row">
+        <span class="loc-icon">🏬</span>
+        <div><div class="loc-title">Avenue & ห้างรอบข้างมากมาย</div><div class="loc-desc">ตลาดธนบุรี · The Paseo Park · Central Eastview · The Mall บางแค · ซีคอนบางแค · Central ปิ่นเกล้า + อีก 2 แห่งเปิดใหม่</div></div>
+      </div>
+      <div class="loc-row">
+        <span class="loc-icon">🍜</span>
+        <div><div class="loc-title">แหล่งอาหารหาง่ายตลอดวัน</div><div class="loc-desc">ตลาดน้ำคลองลัดมะยม (เสาร์-อาทิตย์) · ร้านอาหารใน Avenue ทุกแห่ง</div></div>
+      </div>
+      <div class="loc-row">
+        <span class="loc-icon">💪</span>
+        <div><div class="loc-title">Lifestyle ครบในรัศมีเดิน</div><div class="loc-desc">GYM · คอร์ทแบดมินตัน · สนามฟุตบอล · โรงพยาบาล · ปั้มน้ำมัน · โรงเรียนกวดวิชา</div></div>
+      </div>
+      <div class="loc-row">
+        <span class="loc-icon">🛣️</span>
+        <div><div class="loc-title">เชื่อมต่อทั่วทุกทิศ</div><div class="loc-desc">ปทุมธานี-นนทบุรี (ราชพฤกษ์) · ภาคใต้ (เพชรเกษม) · ภาคตะวันออก · ต่างจังหวัดทุกทิศ</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="map-img-box">
+        <img src="https://i.ibb.co/k6JPfpD8/Body-1.jpg" alt="แผนที่ทำเล NOVA LEARN SPACE" onclick="openLB(this.src)">
+      </div>
+      <div class="location-note">
+        <p>ชานเมืองที่มีทุกอย่างครบ รถไม่แออัด เข้าเมืองง่าย ออกเมืองก็ง่าย — ไลฟ์สไตล์ที่สมดุล สำหรับธุรกิจที่เจริญเติบโตอย่างยั่งยืน</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROMO BANNER -->
+<section id="promo">
+  <div>
+    <p class="promo-eyebrow">🔥 โปรโมชั่น · Limited — เหลือเพียง 2 ยูนิต</p>
+    <h2 class="promo-title">โอกาสสุดท้าย<br><em>2 ยูนิตสุดท้าย</em></h2>
+    <p class="promo-desc">ติดต่อเพื่อนัดชมสถานที่จริงและรับข้อมูลเพิ่มเติม พร้อมเงื่อนไขพิเศษสำหรับผู้ที่สนใจวันนี้</p>
+  </div>
+  <div class="promo-side">
+    <a href="tel:0846988881" class="btn-dark">📞 084-698-8881</a>
+    <a href="https://line.me/ti/p/@810ibeb" target="_blank" class="btn-green">💬 LINE: @810ibeb</a>
+    <p class="promo-note">ติดต่อคุณนกยูง · จ-ศ 08:00-17:00 น.</p>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section-pad">
+  <div class="reveal">
+    <p class="section-label">ติดต่อเรา</p>
+    <h2 class="section-title">พร้อมรับทุก<br>คำถาม</h2>
+  </div>
+  <div class="contact-grid reveal">
+    <!-- LEFT: info + hours -->
+    <div>
+      <div class="c-item">
+        <div class="c-label">โทรศัพท์</div>
+        <div class="c-val"><a href="tel:0846988881">084-698-8881</a></div>
+        <div class="c-sub">ติดต่อคุณนกยูง</div>
+      </div>
+      <div class="c-item">
+        <div class="c-label">LINE Official</div>
+        <div class="c-val"><a href="https://line.me/ti/p/@810ibeb" target="_blank">@810ibeb</a></div>
+        <div class="c-sub">ตอบกลับเร็ว ทุกวัน</div>
+      </div>
+      <div class="c-item">
+        <div class="c-label">ทำเล</div>
+        <div class="c-val" style="font-size:17px;line-height:1.4;">ฝั่งธนฯ (กาญจนาภิเษก-ปิ่นเกล้า)</div>
+        <div class="c-sub">ใกล้ถนนพระเทพตัดใหม่</div>
+      </div>
+      <div class="c-label" style="margin-bottom:10px;">เวลาทำการ</div>
+      <div class="hours-table">
+        <div class="h-row"><span class="h-day">วันจันทร์ – วันศุกร์</span><span class="h-time">08:00 – 17:00</span></div>
+        <div class="h-row"><span class="h-day">วันเสาร์ – วันอาทิตย์</span><span class="h-time">10:00 – 17:00</span></div>
+      </div>
+      <div class="agent-note" style="margin-top:24px;">
+        <p>ยินดีต้อนรับนายหน้าอสังหาริมทรัพย์และพันธมิตรทุกท่าน ติดต่อเพื่อรับข้อมูลและเงื่อนไขพิเศษ</p>
+      </div>
+    </div>
+    <!-- RIGHT: map + form -->
+    <div class="contact-right">
+      <div class="contact-map-img">
+        <img src="https://i.ibb.co/k6JPfpD8/Body-1.jpg" alt="แผนที่ทำเล" onclick="openLB(this.src)">
+      </div>
+      <div class="contact-form-box">
+        <div class="form-title">ให้เราติดต่อกลับ</div>
+        <div class="form-row">
+          <label>ชื่อ-นามสกุล</label>
+          <input type="text" placeholder="กรุณากรอกชื่อ">
+        </div>
+        <div class="form-row">
+          <label>เบอร์โทรศัพท์</label>
+          <input type="tel" placeholder="0XX-XXX-XXXX">
+        </div>
+        <div class="form-row">
+          <label>LINE ID (ถ้ามี)</label>
+          <input type="text" placeholder="@yourline">
+        </div>
+        <div class="form-row">
+          <label>ข้อความ / คำถาม</label>
+          <textarea placeholder="สนใจยูนิตประเภทใด หรือมีข้อสงสัยอะไรบ้าง..."></textarea>
+        </div>
+        <button class="form-submit" onclick="submitForm()">ส่งข้อมูล ให้ติดต่อกลับ →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="foot-brand">NOVA LEARN SPACE · THE YELLOW OFFICIAL STATION</div>
+    <div class="foot-sub">ย่านฝั่งธนฯ (กาญจนาภิเษก-ปิ่นเกล้า) · ใกล้ถนนพระเทพตัดใหม่</div>
+  </div>
+  <div class="foot-copy">© 2025 NOVA LEARN SPACE. All rights reserved.</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((e,i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => io.observe(el));
+
+  // Nav scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.padding = window.scrollY > 60 ? '10px 48px' : '16px 48px';
+  });
+
+  // Gallery strip images for lightbox
+  const galleryImgs = [
+    'https://i.ibb.co/xK3Btj3r/5.jpg','https://i.ibb.co/LhDG2y0s/6.jpg',
+    'https://i.ibb.co/CKgkL4Nv/7.jpg','https://i.ibb.co/jvjq3qYC/8.jpg',
+    'https://i.ibb.co/S43NFLWZ/9.jpg','https://i.ibb.co/PsNp2k9j/10.jpg',
+    'https://i.ibb.co/j9YsR2FS/11.jpg','https://i.ibb.co/bRWBZ8x2/12.jpg',
+    'https://i.ibb.co/7J2GXxV8/13.jpg','https://i.ibb.co/0dGvSDx/14.jpg',
+    'https://i.ibb.co/bj1D8P5P/15.jpg','https://i.ibb.co/DDm4bdmW/17.jpg',
+    'https://i.ibb.co/PZqSqKDL/18.jpg','https://i.ibb.co/YTYvmBdV/22.jpg',
+    'https://i.ibb.co/PsYsDYYp/23.jpg','https://i.ibb.co/1GG76wQd/26.jpg',
+    'https://i.ibb.co/N6LDr2G9/29.jpg','https://i.ibb.co/JZCdSjx/30.jpg',
+    'https://i.ibb.co/jkPKqhVD/31.jpg','https://i.ibb.co/rVVdk90/32.jpg',
+    'https://i.ibb.co/93S8Bjkm/33.jpg','https://i.ibb.co/JWHsLb2k/34.jpg',
+    'https://i.ibb.co/xtfnngg6/35.jpg','https://i.ibb.co/KxcS2TBn/36.jpg',
+    'https://i.ibb.co/MyQcxm1V/37.jpg','https://i.ibb.co/DHf30nH0/38.jpg',
+    'https://i.ibb.co/dJk527WF/40.jpg','https://i.ibb.co/spjVgdND/41.jpg',
+    'https://i.ibb.co/2YkZhgZ9/45.jpg','https://i.ibb.co/PG0SX1r5/46.jpg',
+    'https://i.ibb.co/Z1SkcYh1/47.jpg','https://i.ibb.co/pj9r4d6g/48.jpg'
+  ];
+  let lbIdx = 0;
+  function openLB(src, idx) {
+    lbIdx = (idx !== undefined) ? idx : galleryImgs.indexOf(src);
+    if (lbIdx < 0) lbIdx = 0;
+    document.getElementById('lb-img').src = src;
+    document.getElementById('lb').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeLB() {
+    document.getElementById('lb').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  function lbMove(dir) {
+    lbIdx = (lbIdx + dir + galleryImgs.length) % galleryImgs.length;
+    document.getElementById('lb-img').src = galleryImgs[lbIdx];
+  }
+  document.getElementById('lb').addEventListener('click', function(e) {
+    if (e.target === this) closeLB();
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeLB();
+    if (e.key === 'ArrowRight') lbMove(1);
+    if (e.key === 'ArrowLeft') lbMove(-1);
+  });
+
+  // Form submit
+  function submitForm() {
+    const name = document.querySelector('input[type=text]').value;
+    const phone = document.querySelector('input[type=tel]').value;
+    if (!name || !phone) { alert('กรุณากรอกชื่อและเบอร์โทรศัพท์'); return; }
+    alert('ขอบคุณครับ! ทีมงานจะติดต่อกลับหาคุณ ' + name + ' โดยเร็วที่สุด 📞');
+  }
+</script>
+</body>
+</html>
